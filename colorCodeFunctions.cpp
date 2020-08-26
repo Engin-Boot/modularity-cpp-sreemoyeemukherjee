@@ -1,6 +1,7 @@
 #include <iostream>
 #include <assert.h> 
-#include "colorcode.h"
+#include <sstream>
+#include "colorCodeDefinitions.h"
 void testNumberToPair(int pairNumber,
     TelCoColorCoder::MajorColor expectedMajor,
     TelCoColorCoder::MinorColor expectedMinor)
@@ -20,15 +21,19 @@ void testPairToNumber(
     std::cout << "Got pair number " << pairNumber << std::endl;
     assert(pairNumber == expectedPairNumber);
 }
-void ToString()
+std::string ToString()
 {
     std::cout <<std::endl <<"Number to Color Mapping"<<std::endl<<std::endl;
-    for (int pairNumber = 1; pairNumber <= 25; pairNumber++)
+    std::string mapping=""; // Big string storing entire mapping
+    //Computing the loop limit number below
+    int pairLimit= TelCoColorCoder::GetPairNumberFromColor(TelCoColorCoder::VIOLET,TelCoColorCoder::SLATE);
+    for (int pairNumber=1;pairNumber<=pairLimit;pairNumber++)
     {
         TelCoColorCoder::ColorPair colorPair =
             TelCoColorCoder::GetColorFromPairNumber(pairNumber);
-        std::cout <<pairNumber<<"-->"<<colorPair.ToString() << std::endl;
+         mapping += std::to_string(pairNumber)+"-->"+colorPair.ToString()+"\n";
     }
+    return mapping;
 }
 int main() {
     testNumberToPair(4, TelCoColorCoder::WHITE, TelCoColorCoder::BROWN);
@@ -38,6 +43,6 @@ int main() {
     testPairToNumber(TelCoColorCoder::VIOLET, TelCoColorCoder::SLATE, 25);
 
     //Printing  color to number mapping
-    ToString();
+    std::cout<<ToString();
     return 0;
 }
